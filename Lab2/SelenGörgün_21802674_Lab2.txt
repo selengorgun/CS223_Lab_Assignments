@@ -1,0 +1,182 @@
+Selen Görgün 
+21802674 
+CS 223-006  
+Lab 2 
+Structural module for full subtractor 
+module fullSubtractor( input logic a, b, bin, output logic d, bout); 
+    logic n1, n2, n3; 
+    xor( n1, a, b); 
+and( n2, ~a, b); 
+xor( d, n1, bin); 
+and( n3, ~n1, bin); 
+or( bout, n3, n2); 
+endmodule 
+
+Testbench for full subtractor 
+module fullSubtractorSim( );  
+    logic A;  
+    logic B;  
+    logic Bin;  
+    logic Bout, D;  
+    fullSubtractor full( A,B,Bin,D,Bout);  
+    initial begin  
+    A = 0; B = 0; Bin = 0; #20;  
+
+    A = 0; B = 0; Bin = 1; #20;  
+
+    A = 0; B = 1; Bin = 0; #20;  
+
+    A = 0; B = 1; Bin = 1; #20;  
+
+    A = 1; B = 0; Bin = 0; #20;  
+
+    A = 1; B = 0; Bin = 1; #20;  
+
+    A = 1; B = 1; Bin = 0; #20;  
+
+    A = 1; B = 1; Bin = 1; #20;  
+    end 
+endmodule 
+
+Structural module for full adder 
+module fullAdderStr( input logic x, y, cin, output logic sum, cout);  
+    logic s1, c1, c2;  
+    xor xor1(s1, x, y);  
+    xor xor2(sum, s1, cin); 
+and and1(c1, x, y);
+and and2(c2, s1, cin); 
+or or1(cout, c1, c2);  
+endmodule 
+
+Testbench for structural full adder 
+module fullAdderStrSim(); 
+    logic x, y, cin;  
+    logic sum, cout;  
+    fullAdderStr uut(x ,y ,cin ,sum ,cout); 
+    initial begin  
+    x=0;y=0;cin=0;#5;  
+
+    x=1;y=0;cin=0;#5;    
+
+    x=0;y=1;cin=0;#5;  
+
+    x=1;y=1;cin=0;#5;  
+
+    x=0;y=0;cin=1;#5;  
+
+    x=1;y=0;cin=1;#5;  
+
+    x=0;y=1;cin=1;#5;  
+
+    x=1;y=1;cin=1;#5;  
+    end 
+endmodule 
+
+Behavioral module for full adder 
+module fullAdderBhv(input logic x, y, cin, output logic sum, cout);  
+    assign cout = x & y | y & cin | x & cin ;  
+    assign sum = ~x & ~y & cin | ~x & y & ~cin | x & ~y & ~cin | x & y & cin ;  
+endmodule 
+
+Testbench for behavioral full adder 
+module fullAdderBhvSim(); 
+    logic x, y, cin;  
+    logic sum, cout;  
+    fullAdderBhv uut(x ,y ,cin ,sum ,cout);  
+    initial begin  
+    x=0;y=0;cin=0;#5;    
+
+    x=1;y=0;cin=0;#5;  
+
+    x=0;y=1;cin=0;#5;  
+
+    x=1;y=1;cin=0;#5;  
+
+    x=0;y=0;cin=1;#5;  
+
+    x=1;y=0;cin=1;#5;  
+
+    x=0;y=1;cin=1;#5;  
+
+    x=1;y=1;cin=1;#5;  
+    end 
+endmodule 
+
+Structural module for two bit adder 
+module twoBitAdderStr(input logic A0, A1, B0, B1, C0, output logic S1,S2,Cout );  
+    logic W1;  
+    fullAdderStr adder1(A0,B0,C0,S1,W1);  
+    fullAdderStr adder2(A1,B1,W1,S2,Cout);  
+endmodule
+
+Testbench for two bit adder 
+module twoBitAdderStrSim(); 
+    logic A0,B0,A1,B1,C0;  
+    logic S1,S2,Cout;  
+    twoBitAdderStr tba(A0,A1,B0,B1,C0,S1,S2,Cout);  
+    initial begin  
+    A0=0;B0=0;A1=0;B1=0;C0=0; #5;      
+
+    A0=1;B0=0;A1=0;B1=0;C0=0; #5;  
+
+    A0=0;B0=1;A1=0;B1=0;C0=0; #5;  
+
+    A0=1;B0=1;A1=0;B1=0;C0=0; #5;  
+
+    A0=0;B0=0;A1=1;B1=0;C0=0; #5;  
+
+    A0=1;B0=0;A1=1;B1=0;C0=0; #5;  
+
+    A0=0;B0=1;A1=1;B1=0;C0=0; #5;  
+
+    A0=1;B0=1;A1=1;B1=0;C0=0; #5;  
+
+    A0=0;B0=0;A1=0;B1=1;C0=0; #5;  
+
+    A0=1;B0=0;A1=0;B1=1;C0=0; #5;  
+
+    A0=0;B0=1;A1=0;B1=1;C0=0; #5;  
+
+    A0=1;B0=1;A1=0;B1=1;C0=0; #5;  
+
+    A0=0;B0=0;A1=1;B1=1;C0=0; #5;  
+
+    A0=1;B0=0;A1=1;B1=1;C0=0; #5;  
+
+    A0=0;B0=1;A1=1;B1=1;C0=0; #5;  
+
+    A0=1;B0=1;A1=1;B1=1;C0=0; #5;  
+
+    A0=0;B0=0;A1=0;B1=0;C0=1; #5;  
+
+    A0=1;B0=0;A1=0;B1=0;C0=1; #5;  
+
+    A0=0;B0=1;A1=0;B1=0;C0=1; #5;  
+
+    A0=1;B0=1;A1=0;B1=0;C0=1; #5;    
+
+    A0=0;B0=0;A1=1;B1=0;C0=1; #5;    
+
+    A0=1;B0=0;A1=1;B1=0;C0=1; #5;  
+
+    A0=0;B0=1;A1=1;B1=0;C0=1; #5;  
+
+    A0=1;B0=1;A1=1;B1=0;C0=1; #5;  
+
+    A0=0;B0=0;A1=0;B1=1;C0=1; #5;  
+
+    A0=1;B0=0;A1=0;B1=1;C0=1; #5;  
+
+    A0=0;B0=1;A1=0;B1=1;C0=1; #5;  
+
+    A0=1;B0=1;A1=0;B1=1;C0=1; #5;  
+
+    A0=0;B0=0;A1=1;B1=1;C0=1; #5;  
+
+    A0=1;B0=0;A1=1;B1=1;C0=1; #5;  
+
+    A0=0;B0=1;A1=1;B1=1;C0=1; #5;  
+
+    A0=1;B0=1;A1=1;B1=1;C0=1; #5;  
+    end 
+endmodule 

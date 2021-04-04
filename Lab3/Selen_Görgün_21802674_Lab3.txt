@@ -1,0 +1,101 @@
+Selen Görgün  
+21802674 
+CS 223 
+Lab 3
+20.10.20
+2:4 Decoder Behavioral Module 
+module to4_decoder_behavioral(input logic a, b, output logic d0, d1, d2, d3); 
+assign d0 = ~a & ~b; 
+assign d1 = a & ~b; 
+assign d2 = ~a & b; 
+assign d3 =a & b; 
+endmodule 
+2:4 Decoder Simulation 
+module to4_decoder_sim(); 
+logic a, b; 
+logic d0, d1, d2, d3; 
+2to4_behavioral   dec(a, b, d0, d1, d2, d3); 
+initial begin 
+        		integer i; 
+        		for(i = 0; i < 2**2; i = i +1) 
+        		begin 
+        		{a, b,} = i; 
+        		#10; 
+        		end 
+    	end 
+endmodule 
+4:1 Multiplexer Behavioral Module  
+module mux_4to1_behavioral(  
+    input logic  a1, a2, a3, a4,  
+    input logic  s1, s2,  
+    output logic y  
+    );  
+    assign y = s2 ? (s1 ? a4 : a3): (s1 ? a2 : a1);  
+endmodule  
+4:1 Multiplexer Behavioral Simulation Module  
+module mux_4to1_sim();     
+    logic  a, b, c, d;  
+    logic  s1 , s0;  
+    logic  y;  
+    mux_4to1_behavioral mux(a, b, c, d, s0 ,s1, y);  
+    initial begin  
+        integer i;  
+        for(i = 0; i < 2**6; i = i +1)  
+        begin  
+        {a, b, c, d, s1, s0} = i;  
+        #10;  
+        end  
+    end  
+endmodule  
+8:1 Multiplexer Structural Module  
+module mux_8to1_structural(  
+    input logic a0,a1,a2,a3,a4,a5,a6,a7,s2,s1,s0,  
+    output logic y  
+    );  
+    logic w1, w2, w3, w4, w5;  
+    mux_4to1_behavioral mux1(a0, a1, a2, a3, s0, s1, w1);  
+    mux_4to1_behavioral mux2(a4, a5, a6, a7, s0, s1, w2);  
+    not not1(w5, s2);  
+    and and1(w3, w5, w1);  
+    and and2(w4, s2, w2);  
+    or  or1 (y, w3, w4);  
+endmodule  
+8:1 Multiplexer Simulator Module  
+module mux_8to1_sim();  
+    logic a0,a1,a2,a3,a4,a5,a6,a7,s2,s1,s0;  
+    logic y;  
+    mux_8to1_structural mux8(a0,a1,a2,a3,a4,a5,a6,a7,s2,s1,s0,y);  
+    initial begin  
+        integer i;  
+        for(i = 0; i < 2**11; i = i +1)  
+        begin  
+        {a0,a1,a2,a3,a4,a5,a6,a7,s2,s1,s0} = i;  
+        #0.5;  
+        end  
+    end  
+endmodule 
+Function with one 8:1 Mux and one Inverter Module  
+module function_with_mux_structural(  
+    input logic a, b, c , d,  
+    output logic y  
+    );  
+    logic w1;  
+    not not1(w1, d);  
+    mux_8to1_structural mux8_1(1, d, w1, d, w1, 1, 0, d, a, b, c, y);  
+endmodule  
+Function with one 8:1 Mux and one Inverter Simulaton Module  
+module function_with_mux_sim();  
+    logic a, b, c, d;  
+    logic y;  
+    function_with_mux_structural func(a, b, c, d, y);  
+    initial begin  
+        integer i;  
+        for(i = 0; i < 2**4; i = i +1)  
+        begin  
+        {a, b, c, d} = i;  
+        #10;  
+        end  
+    end  
+endmodule 
+
+ 
